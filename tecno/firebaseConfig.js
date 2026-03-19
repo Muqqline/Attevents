@@ -1,0 +1,16 @@
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDBigVuMiRrfiunEW13hbtGx4KIbLyKEfw",
+  authDomain: "attevents-57852.firebaseapp.com",
+  projectId: "attevents-57852",
+  storageBucket: "attevents-57852.firebasestorage.app",
+  messagingSenderId: "342294109362",
+  appId: "1:342294109362:web:81b4245842ed2ef56efdab",
+  measurementId: "G-HSVQG9G73T"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+export { auth };
