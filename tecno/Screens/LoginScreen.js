@@ -1,28 +1,54 @@
-import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
-import { AuthContexto } from '../contextos/AuthContexto'; 
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { auth } from '../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import styles from './styles/LoginStyles';
 
 const LoginScreen = ({ navigation }) => {
- const [nombreUsuario, setNombreUsuario] = useState('');
- const { iniciarSesion } = useContext(AuthContexto);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
- const handleLogin = () => {
- iniciarSesion({ nombre: nombreUsuario });
- };
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log('Usuario autenticado:', userCredential.user);
+      })
+      .catch(() => {
+        setError('Email o contraseña incorrectos');
+      });
+  };
 
-return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Iniciar sesión </Text>
+  return (
+    <View style={styles.container}>
+      <Text style={styles.titulo}>AtteVents</Text>
+      <Text style={styles.subtitulo}>Gestión de Eventos Académicos</Text>
       <TextInput
-        placeholder="Usuario"
-        value={nombreUsuario}
-        onChangeText={setNombreUsuario}
-        style={{ borderWidth: 1, padding: 10, marginVertical: 10, width:'80%' }}
+        placeholder="Correo electrónico"
+        placeholderTextColor="#90CAF9"
+        value={email}
+        onChangeText={setEmail}
+        style={styles.input}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
-      <Button title="Ingresar " onPress={handleLogin} />
-      <Button title="Crear cuenta" onPress={() => navigation.navigate('Registro')} /> 
+      <TextInput
+        placeholder="Contraseña"
+        placeholderTextColor="#90CAF9"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={styles.input}
+      />
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+      <TouchableOpacity style={styles.boton} onPress={handleLogin}>
+        <Text style={styles.botonTexto}>Iniciar Sesión</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
+        <Text style={styles.linkTexto}>¿No tienes cuenta? Regístrate</Text>
+      </TouchableOpacity>
     </View>
-  ); 
+  );
 };
 
-export default LoginScreen;
+export default LoginScreen; 
