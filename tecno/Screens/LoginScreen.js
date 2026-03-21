@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'; 
 import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import styles from './styles/LoginStyles';
@@ -9,15 +9,17 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log('Usuario autenticado:', userCredential.user);
-      })
-      .catch(() => {
-        setError('Email o contraseña incorrectos');
-      });
-  };
+  const handleLogin = async () => {
+  if (!email || !password) {
+    Alert.alert('Faltan datos', 'Por favor, ingresa tu correo y contraseña.');
+    return;
+  }
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    Alert.alert('Error al iniciar sesión', 'El correo o la contraseña son incorrectos.');
+  }
+};
 
   return (
     <View style={styles.container}>
