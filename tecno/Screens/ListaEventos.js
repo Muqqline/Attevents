@@ -41,7 +41,7 @@ const ListaEventos = ({ navigation }) => {
           <TouchableOpacity 
             style={styles.tarjeta}
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('DetalleEvento', { eventoId: item.id })}
+            onPress={() => navigation.navigate('Detalle', { eventoId: item.id })} 
           >
             <Text style={styles.titulo}>{item.titulo}</Text>
             <View style={styles.filaInfo}>
